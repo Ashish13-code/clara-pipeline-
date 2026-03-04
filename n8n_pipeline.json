@@ -1,0 +1,101 @@
+{
+  "name": "Clara Onboarding Pipeline",
+  "nodes": [
+    {
+      "parameters": {
+        "path": "demo-transcript",
+        "httpMethod": "POST",
+        "responseMode": "responseNode"
+      },
+      "name": "Webhook - Demo Transcript In",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [240, 300],
+      "id": "node_001"
+    },
+    {
+      "parameters": {
+        "functionCode": "// Normalize incoming transcript\nconst body = $input.first().json;\nconst transcript = body.transcript || body.text || '';\nconst account_id = body.account_id || 'UNKNOWN';\nconst pipeline_type = body.pipeline_type || 'demo';\n\nif (!transcript) {\n  throw new Error('No transcript provided');\n}\n\nreturn [{\n  json: {\n    transcript,\n    account_id,\n    pipeline_type,\n    received_at: new Date().toISOString()\n  }\n}];"
+      },
+      "name": "Normalize Input",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [460, 300],
+      "id": "node_002"
+    },
+    {
+      "parameters": {
+        "functionCode": "// Rule-based extraction - mirrors extractor.py logic\nconst text = $input.first().json.transcript;\nconst account_id = $input.first().json.account_id;\n\n// Extract company name\nconst companyMatch = text.match(/Company:\\s*(.+)/i);\nconst company_name = companyMatch ? companyMatch[1].trim() : null;\n\n// Extract email\nconst emailMatch = text.match(/[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+/);\nconst email = emailMatch ? emailMatch[0] : null;\n\n// Extract phones\nconst phoneMatches = text.match(/\\+?1?[-.\\s]?\\(?\\d{3}\\)?[-.\\s]?\\d{3}[-.\\s]?\\d{4}/g) || [];\n\n// Extract time\nconst timeMatch = text.match(/(\\d{1,2}(?::\\d{2})?\\s*(?:am|pm))\\s*(?:to|-)\\s*(\\d{1,2}(?::\\d{2})?\\s*(?:am|pm))/i);\nconst start_time = timeMatch ? timeMatch[1] : null;\nconst end_time = timeMatch ? timeMatch[2] : null;\n\n// Extract timezone\nconst tzMatch = text.match(/\\b(mountain|pacific|eastern|central|MST|PST|EST|CST)\\b/i);\nconst timezone = tzMatch ? tzMatch[0].toUpperCase() : null;\n\n// Extract days\nconst daysMatch = text.match(/(monday|tuesday|wednesday|thursday|friday|saturday|sunday)[\\s\\w]*(monday|tuesday|wednesday|thursday|friday|saturday|sunday)?/i);\nconst days = daysMatch ? daysMatch[0] : null;\n\nconst memo = {\n  account_id,\n  version: 'v1',\n  company_name,\n  email,\n  phone: phoneMatches[0] || null,\n  business_hours: {\n    days,\n    start_time,\n    end_time,\n    timezone,\n    confirmed: !!(start_time && timezone)\n  },\n  emergency_routing_rules: {\n    primary_number: phoneMatches[0] || null,\n    backup_number: phoneMatches[1] || null,\n    transfer_timeout_seconds: null,\n    fallback_action: null\n  },\n  questions_or_unknowns: [],\n  extracted_at: new Date().toISOString()\n};\n\n// Flag unknowns\nif (!start_time) memo.questions_or_unknowns.push('Missing: business_hours.start_time');\nif (!timezone) memo.questions_or_unknowns.push('Missing: business_hours.timezone');\nif (!phoneMatches[0]) memo.questions_or_unknowns.push('Missing: transfer_number');\n\nreturn [{ json: { memo, account_id } }];"
+      },
+      "name": "Extract Account Memo",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [680, 300],
+      "id": "node_003"
+    },
+    {
+      "parameters": {
+        "functionCode": "// Generate Retell agent prompt from memo\nconst memo = $input.first().json.memo;\nconst company = memo.company_name || 'our company';\nconst bh = memo.business_hours || {};\nconst days = bh.days || 'Monday to Friday';\nconst start = bh.start_time || '8:00 AM';\nconst end = bh.end_time || '5:00 PM';\nconst tz = bh.timezone || 'local time';\n\nconst prompt = `You are Clara, a professional AI voice receptionist for ${company}.\n\nBUSINESS HOURS: ${days}, ${start} – ${end} ${tz}\n\nBUSINESS HOURS FLOW:\n1. Greet: \"Thank you for calling ${company}! This is Clara, how can I help you today?\"\n2. Ask purpose of call.\n3. Collect name and callback number. Confirm both.\n4. Transfer call. If fails: apologize and confirm callback.\n5. Ask if anything else. Close call.\n\nAFTER-HOURS FLOW:\n1. Greet and inform of hours.\n2. Ask purpose.\n3. Confirm emergency or non-emergency.\n4. Emergency: collect name, number, address → transfer immediately.\n   Transfer fail: log details, assure quick callback.\n5. Non-emergency: collect details → confirm next business day callback.\n6. Close call.`;\n\nconst spec = {\n  agent_name: `Clara-${(memo.company_name || 'Agent').replace(/\\s/g, '-')}-v1`,\n  version: 'v1',\n  account_id: memo.account_id,\n  system_prompt: prompt,\n  key_variables: {\n    timezone: bh.timezone,\n    business_hours_start: bh.start_time,\n    business_hours_end: bh.end_time,\n    business_days: bh.days,\n    transfer_number: memo.emergency_routing_rules?.primary_number\n  },\n  questions_or_unknowns: memo.questions_or_unknowns\n};\n\nreturn [{ json: { memo, spec, account_id: memo.account_id } }];"
+      },
+      "name": "Generate Agent Spec",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [900, 300],
+      "id": "node_004"
+    },
+    {
+      "parameters": {
+        "operation": "write",
+        "fileName": "={{ 'outputs/accounts/' + $json.account_id + '/v1/account_memo.json' }}",
+        "dataPropertyName": "memo",
+        "encoding": "utf8"
+      },
+      "name": "Save Memo JSON",
+      "type": "n8n-nodes-base.writeBinaryFile",
+      "typeVersion": 1,
+      "position": [1120, 200],
+      "id": "node_005"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({ status: 'success', account_id: $json.account_id, version: 'v1', unknowns: $json.memo.questions_or_unknowns }) }}"
+      },
+      "name": "Respond Success",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [1120, 400],
+      "id": "node_006"
+    }
+  ],
+  "connections": {
+    "Webhook - Demo Transcript In": {
+      "main": [[ { "node": "Normalize Input", "type": "main", "index": 0 } ]]
+    },
+    "Normalize Input": {
+      "main": [[ { "node": "Extract Account Memo", "type": "main", "index": 0 } ]]
+    },
+    "Extract Account Memo": {
+      "main": [[ { "node": "Generate Agent Spec", "type": "main", "index": 0 } ]]
+    },
+    "Generate Agent Spec": {
+      "main": [
+        [ { "node": "Save Memo JSON", "type": "main", "index": 0 } ],
+        [ { "node": "Respond Success", "type": "main", "index": 0 } ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "meta": {
+    "description": "ZenTrades AI - Demo to v1 Agent Pipeline. Import this into n8n (self-hosted via Docker).",
+    "setup_instructions": [
+      "1. Install n8n: npx n8n (or docker run -it --rm --name n8n -p 5678:5678 n8nio/n8n)",
+      "2. Open http://localhost:5678",
+      "3. Import this JSON via Workflows > Import from file",
+      "4. Activate the workflow",
+      "5. POST to http://localhost:5678/webhook/demo-transcript with body: { account_id, transcript, pipeline_type }"
+    ]
+  }
+}

@@ -1,0 +1,213 @@
+{
+  "tasks": [
+    {
+      "task_id": "51E2F0A4",
+      "account_id": "ACC002",
+      "company_name": "ZenTrades AI - Pressure Division",
+      "pipeline": "pipeline_a",
+      "version": "v1",
+      "status": "completed",
+      "created_at": "2026-03-04T13:35:43.352290",
+      "unknowns_flagged": [
+        "Missing or unconfirmed: business_hours.start_time",
+        "Missing or unconfirmed: business_hours.timezone",
+        "Missing or unconfirmed: emergency_routing_rules.transfer_timeout_seconds",
+        "Missing or unconfirmed: office_address"
+      ],
+      "unknowns_count": 4,
+      "output_dir": "outputs/accounts/ACC002/v1",
+      "notes": "Demo call processed. 4 unknowns flagged for onboarding.",
+      "action_required": true,
+      "action_items": [
+        "Resolve unknown: Missing or unconfirmed: business_hours.start_time",
+        "Resolve unknown: Missing or unconfirmed: business_hours.timezone",
+        "Resolve unknown: Missing or unconfirmed: emergency_routing_rules.transfer_timeout_seconds",
+        "Resolve unknown: Missing or unconfirmed: office_address"
+      ]
+    },
+    {
+      "task_id": "DAF8CF2A",
+      "account_id": "ACC004",
+      "company_name": "Arctic HVAC Services Ltd.",
+      "pipeline": "pipeline_a",
+      "version": "v1",
+      "status": "completed",
+      "created_at": "2026-03-04T13:35:43.356338",
+      "unknowns_flagged": [
+        "Missing or unconfirmed: business_hours.start_time",
+        "Missing or unconfirmed: business_hours.timezone",
+        "Missing or unconfirmed: emergency_routing_rules.transfer_timeout_seconds",
+        "Missing or unconfirmed: office_address"
+      ],
+      "unknowns_count": 4,
+      "output_dir": "outputs/accounts/ACC004/v1",
+      "notes": "Demo call processed. 4 unknowns flagged for onboarding.",
+      "action_required": true,
+      "action_items": [
+        "Resolve unknown: Missing or unconfirmed: business_hours.start_time",
+        "Resolve unknown: Missing or unconfirmed: business_hours.timezone",
+        "Resolve unknown: Missing or unconfirmed: emergency_routing_rules.transfer_timeout_seconds",
+        "Resolve unknown: Missing or unconfirmed: office_address"
+      ]
+    },
+    {
+      "task_id": "96E4587B",
+      "account_id": "ACC001",
+      "company_name": "ZenTrades AI",
+      "pipeline": "pipeline_a",
+      "version": "v1",
+      "status": "completed",
+      "created_at": "2026-03-04T13:35:43.361036",
+      "unknowns_flagged": [
+        "Missing or unconfirmed: business_hours.start_time",
+        "Missing or unconfirmed: business_hours.timezone",
+        "Missing or unconfirmed: emergency_routing_rules.primary_number",
+        "Missing or unconfirmed: emergency_routing_rules.transfer_timeout_seconds",
+        "Missing or unconfirmed: office_address"
+      ],
+      "unknowns_count": 5,
+      "output_dir": "outputs/accounts/ACC001/v1",
+      "notes": "Demo call processed. 5 unknowns flagged for onboarding.",
+      "action_required": true,
+      "action_items": [
+        "Resolve unknown: Missing or unconfirmed: business_hours.start_time",
+        "Resolve unknown: Missing or unconfirmed: business_hours.timezone",
+        "Resolve unknown: Missing or unconfirmed: emergency_routing_rules.primary_number",
+        "Resolve unknown: Missing or unconfirmed: emergency_routing_rules.transfer_timeout_seconds",
+        "Resolve unknown: Missing or unconfirmed: office_address"
+      ]
+    },
+    {
+      "task_id": "5A38F8E8",
+      "account_id": "ACC003",
+      "company_name": "Shield Fire Protection Inc.",
+      "pipeline": "pipeline_a",
+      "version": "v1",
+      "status": "completed",
+      "created_at": "2026-03-04T13:35:43.364929",
+      "unknowns_flagged": [
+        "Missing or unconfirmed: business_hours.days",
+        "Missing or unconfirmed: business_hours.start_time",
+        "Missing or unconfirmed: business_hours.timezone",
+        "Missing or unconfirmed: emergency_routing_rules.transfer_timeout_seconds",
+        "Missing or unconfirmed: office_address"
+      ],
+      "unknowns_count": 5,
+      "output_dir": "outputs/accounts/ACC003/v1",
+      "notes": "Demo call processed. 5 unknowns flagged for onboarding.",
+      "action_required": true,
+      "action_items": [
+        "Resolve unknown: Missing or unconfirmed: business_hours.days",
+        "Resolve unknown: Missing or unconfirmed: business_hours.start_time",
+        "Resolve unknown: Missing or unconfirmed: business_hours.timezone",
+        "Resolve unknown: Missing or unconfirmed: emergency_routing_rules.transfer_timeout_seconds",
+        "Resolve unknown: Missing or unconfirmed: office_address"
+      ]
+    },
+    {
+      "task_id": "A27E4C39",
+      "account_id": "ACC005",
+      "company_name": "Sentinel Alarm Systems",
+      "pipeline": "pipeline_a",
+      "version": "v1",
+      "status": "completed",
+      "created_at": "2026-03-04T13:35:43.368855",
+      "unknowns_flagged": [
+        "Missing or unconfirmed: business_hours.start_time",
+        "Missing or unconfirmed: business_hours.timezone",
+        "Missing or unconfirmed: emergency_routing_rules.transfer_timeout_seconds",
+        "Missing or unconfirmed: office_address"
+      ],
+      "unknowns_count": 4,
+      "output_dir": "outputs/accounts/ACC005/v1",
+      "notes": "Demo call processed. 4 unknowns flagged for onboarding.",
+      "action_required": true,
+      "action_items": [
+        "Resolve unknown: Missing or unconfirmed: business_hours.start_time",
+        "Resolve unknown: Missing or unconfirmed: business_hours.timezone",
+        "Resolve unknown: Missing or unconfirmed: emergency_routing_rules.transfer_timeout_seconds",
+        "Resolve unknown: Missing or unconfirmed: office_address"
+      ]
+    },
+    {
+      "task_id": "E4A364AF",
+      "account_id": "ACC003",
+      "company_name": "Shield Fire Protection Inc.",
+      "pipeline": "pipeline_b",
+      "version": "v2",
+      "status": "completed",
+      "created_at": "2026-03-04T13:35:43.374051",
+      "unknowns_flagged": [],
+      "unknowns_count": 0,
+      "output_dir": "outputs/accounts/ACC003/v2",
+      "notes": "Onboarding processed. 5 unknowns resolved. 0 remaining.",
+      "action_required": false,
+      "action_items": []
+    },
+    {
+      "task_id": "547D4FA6",
+      "account_id": "ACC002",
+      "company_name": "ZenTrades AI - Pressure Division",
+      "pipeline": "pipeline_b",
+      "version": "v2",
+      "status": "completed",
+      "created_at": "2026-03-04T13:35:43.378734",
+      "unknowns_flagged": [
+        "Missing or unconfirmed: office_address"
+      ],
+      "unknowns_count": 1,
+      "output_dir": "outputs/accounts/ACC002/v2",
+      "notes": "Onboarding processed. 3 unknowns resolved. 1 remaining.",
+      "action_required": true,
+      "action_items": [
+        "Resolve unknown: Missing or unconfirmed: office_address"
+      ]
+    },
+    {
+      "task_id": "2C9ED232",
+      "account_id": "ACC004",
+      "company_name": "Arctic HVAC Services Ltd.",
+      "pipeline": "pipeline_b",
+      "version": "v2",
+      "status": "completed",
+      "created_at": "2026-03-04T13:35:43.405193",
+      "unknowns_flagged": [],
+      "unknowns_count": 0,
+      "output_dir": "outputs/accounts/ACC004/v2",
+      "notes": "Onboarding processed. 4 unknowns resolved. 0 remaining.",
+      "action_required": false,
+      "action_items": []
+    },
+    {
+      "task_id": "1ABD4B0B",
+      "account_id": "ACC005",
+      "company_name": "Sentinel Alarm Systems",
+      "pipeline": "pipeline_b",
+      "version": "v2",
+      "status": "completed",
+      "created_at": "2026-03-04T13:35:43.411143",
+      "unknowns_flagged": [],
+      "unknowns_count": 0,
+      "output_dir": "outputs/accounts/ACC005/v2",
+      "notes": "Onboarding processed. 4 unknowns resolved. 0 remaining.",
+      "action_required": false,
+      "action_items": []
+    },
+    {
+      "task_id": "405AC085",
+      "account_id": "ACC001",
+      "company_name": "ZenTrades AI",
+      "pipeline": "pipeline_b",
+      "version": "v2",
+      "status": "completed",
+      "created_at": "2026-03-04T13:35:43.416296",
+      "unknowns_flagged": [],
+      "unknowns_count": 0,
+      "output_dir": "outputs/accounts/ACC001/v2",
+      "notes": "Onboarding processed. 5 unknowns resolved. 0 remaining.",
+      "action_required": false,
+      "action_items": []
+    }
+  ],
+  "last_updated": "2026-03-04T13:35:43.416728"
+}

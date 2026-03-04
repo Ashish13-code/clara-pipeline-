@@ -1,0 +1,62 @@
+{
+  "account_id": "ACC001",
+  "version": "v2",
+  "company_name": "ZenTrades AI",
+  "contact_name": null,
+  "email": "info@benselectricsolutionsteam.com",
+  "phone": "+14035550192",
+  "office_address": "142 Industrial Blvd, Calgary, AB T2E 7N4.",
+  "business_hours": {
+    "days": "Monday through Friday",
+    "start_time": "7:30 AM",
+    "end_time": "5:00 PM",
+    "timezone": "MOUNTAIN",
+    "raw": "Monday to Friday",
+    "confirmed": true
+  },
+  "services_supported": [
+    "Electrical Service",
+    "Inspections",
+    "Maintenance",
+    "Quotes/Estimates"
+  ],
+  "emergency_definition": [
+    "[CLIENT]: Electrical fire, sparking panels, complete power outage at a facility, exposed live wires, or any situation that poses immediate safety risk",
+    "[CLIENT]: Yes \u2014 for electrical fire calls, always ask the caller if they have already called 911",
+    "And your emergency dispatch number"
+  ],
+  "non_emergency_definition": [
+    "[CLIENT]: Inspection scheduling, quotes, routine maintenance requests",
+    "Collect their info and we'll call back next business day"
+  ],
+  "emergency_routing_rules": {
+    "primary_number": "+14035550192",
+    "backup_number": "+14035550193",
+    "invalid_numbers_flagged": [],
+    "transfer_timeout_seconds": 45,
+    "fallback_action": "callback within 2 hours"
+  },
+  "non_emergency_routing_rules": {
+    "action": "collect_details_and_callback",
+    "callback_timing": "callback within 2 hours"
+  },
+  "call_transfer_rules": {
+    "timeout_seconds": 45,
+    "retry_number": "+14035550193",
+    "on_fail": "callback within 2 hours"
+  },
+  "integration_constraints": [
+    "[ONBOARDING REP]: What about ServiceTrade \u2014 any constraints",
+    "no answer within 45 seconds, try the backup line: 403-555-0193",
+    "do NOT create jobs in ServiceTrade automatically",
+    "no answer, apologize to caller and tell them someone will call back within 2 hours for emergencies, next business day for non-emergency"
+  ],
+  "after_hours_flow_summary": "Emergency: collect name/number/address \u2192 transfer immediately | Non-emergency: collect details \u2192 confirm callback next business day",
+  "office_hours_flow_summary": "Greet \u2192 Ask purpose \u2192 Collect name and number \u2192 Transfer call \u2192 Fallback if fails \u2192 Close",
+  "phone_validation": {
+    "valid": [],
+    "invalid": []
+  },
+  "questions_or_unknowns": [],
+  "notes": "Updated from onboarding call. Version: v2. Generated: 2026-03-04."
+}

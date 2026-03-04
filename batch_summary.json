@@ -1,0 +1,148 @@
+{
+  "batch_run_at": "2026-03-04T13:35:43.348066",
+  "pipeline_a_results": [
+    {
+      "account_id": "ACC002",
+      "version": "v1",
+      "status": "success",
+      "output_dir": "outputs/accounts/ACC002/v1",
+      "memo_path": "outputs/accounts/ACC002/v1/account_memo.json",
+      "spec_path": "outputs/accounts/ACC002/v1/agent_spec.json",
+      "prompt_path": "outputs/accounts/ACC002/v1/agent_prompt.txt",
+      "unknowns_count": 4,
+      "generated_at": "2026-03-04T13:35:43.352892"
+    },
+    {
+      "account_id": "ACC004",
+      "version": "v1",
+      "status": "success",
+      "output_dir": "outputs/accounts/ACC004/v1",
+      "memo_path": "outputs/accounts/ACC004/v1/account_memo.json",
+      "spec_path": "outputs/accounts/ACC004/v1/agent_spec.json",
+      "prompt_path": "outputs/accounts/ACC004/v1/agent_prompt.txt",
+      "unknowns_count": 4,
+      "generated_at": "2026-03-04T13:35:43.357575"
+    },
+    {
+      "account_id": "ACC001",
+      "version": "v1",
+      "status": "success",
+      "output_dir": "outputs/accounts/ACC001/v1",
+      "memo_path": "outputs/accounts/ACC001/v1/account_memo.json",
+      "spec_path": "outputs/accounts/ACC001/v1/agent_spec.json",
+      "prompt_path": "outputs/accounts/ACC001/v1/agent_prompt.txt",
+      "unknowns_count": 5,
+      "generated_at": "2026-03-04T13:35:43.361778"
+    },
+    {
+      "account_id": "ACC003",
+      "version": "v1",
+      "status": "success",
+      "output_dir": "outputs/accounts/ACC003/v1",
+      "memo_path": "outputs/accounts/ACC003/v1/account_memo.json",
+      "spec_path": "outputs/accounts/ACC003/v1/agent_spec.json",
+      "prompt_path": "outputs/accounts/ACC003/v1/agent_prompt.txt",
+      "unknowns_count": 5,
+      "generated_at": "2026-03-04T13:35:43.365874"
+    },
+    {
+      "account_id": "ACC005",
+      "version": "v1",
+      "status": "success",
+      "output_dir": "outputs/accounts/ACC005/v1",
+      "memo_path": "outputs/accounts/ACC005/v1/account_memo.json",
+      "spec_path": "outputs/accounts/ACC005/v1/agent_spec.json",
+      "prompt_path": "outputs/accounts/ACC005/v1/agent_prompt.txt",
+      "unknowns_count": 4,
+      "generated_at": "2026-03-04T13:35:43.369689"
+    }
+  ],
+  "pipeline_b_results": [
+    {
+      "account_id": "ACC003",
+      "version": "v2",
+      "status": "success",
+      "output_dir": "outputs/accounts/ACC003/v2",
+      "memo_path": "outputs/accounts/ACC003/v2/account_memo.json",
+      "spec_path": "outputs/accounts/ACC003/v2/agent_spec.json",
+      "prompt_path": "outputs/accounts/ACC003/v2/agent_prompt.txt",
+      "changelog_json": "outputs/accounts/ACC003/changelog/changes.json",
+      "changelog_md": "outputs/accounts/ACC003/changelog/changes.md",
+      "changes_count": 20,
+      "unknowns_resolved": 5,
+      "unknowns_remaining": 0,
+      "generated_at": "2026-03-04T13:35:43.374808"
+    },
+    {
+      "account_id": "ACC002",
+      "version": "v2",
+      "status": "success",
+      "output_dir": "outputs/accounts/ACC002/v2",
+      "memo_path": "outputs/accounts/ACC002/v2/account_memo.json",
+      "spec_path": "outputs/accounts/ACC002/v2/agent_spec.json",
+      "prompt_path": "outputs/accounts/ACC002/v2/agent_prompt.txt",
+      "changelog_json": "outputs/accounts/ACC002/changelog/changes.json",
+      "changelog_md": "outputs/accounts/ACC002/changelog/changes.md",
+      "changes_count": 16,
+      "unknowns_resolved": 3,
+      "unknowns_remaining": 1,
+      "generated_at": "2026-03-04T13:35:43.379446"
+    },
+    {
+      "account_id": "ACC004",
+      "version": "v2",
+      "status": "success",
+      "output_dir": "outputs/accounts/ACC004/v2",
+      "memo_path": "outputs/accounts/ACC004/v2/account_memo.json",
+      "spec_path": "outputs/accounts/ACC004/v2/agent_spec.json",
+      "prompt_path": "outputs/accounts/ACC004/v2/agent_prompt.txt",
+      "changelog_json": "outputs/accounts/ACC004/changelog/changes.json",
+      "changelog_md": "outputs/accounts/ACC004/changelog/changes.md",
+      "changes_count": 20,
+      "unknowns_resolved": 4,
+      "unknowns_remaining": 0,
+      "generated_at": "2026-03-04T13:35:43.406320"
+    },
+    {
+      "account_id": "ACC005",
+      "version": "v2",
+      "status": "success",
+      "output_dir": "outputs/accounts/ACC005/v2",
+      "memo_path": "outputs/accounts/ACC005/v2/account_memo.json",
+      "spec_path": "outputs/accounts/ACC005/v2/agent_spec.json",
+      "prompt_path": "outputs/accounts/ACC005/v2/agent_prompt.txt",
+      "changelog_json": "outputs/accounts/ACC005/changelog/changes.json",
+      "changelog_md": "outputs/accounts/ACC005/changelog/changes.md",
+      "changes_count": 14,
+      "unknowns_resolved": 4,
+      "unknowns_remaining": 0,
+      "generated_at": "2026-03-04T13:35:43.411963"
+    },
+    {
+      "account_id": "ACC001",
+      "version": "v2",
+      "status": "success",
+      "output_dir": "outputs/accounts/ACC001/v2",
+      "memo_path": "outputs/accounts/ACC001/v2/account_memo.json",
+      "spec_path": "outputs/accounts/ACC001/v2/agent_spec.json",
+      "prompt_path": "outputs/accounts/ACC001/v2/agent_prompt.txt",
+      "changelog_json": "outputs/accounts/ACC001/changelog/changes.json",
+      "changelog_md": "outputs/accounts/ACC001/changelog/changes.md",
+      "changes_count": 21,
+      "unknowns_resolved": 5,
+      "unknowns_remaining": 0,
+      "generated_at": "2026-03-04T13:35:43.417130"
+    }
+  ],
+  "summary": {
+    "total_accounts": 5,
+    "pipeline_a": {
+      "success": 5,
+      "failed": 0
+    },
+    "pipeline_b": {
+      "success": 5,
+      "failed": 0
+    }
+  }
+}

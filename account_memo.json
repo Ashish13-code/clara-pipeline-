@@ -1,0 +1,67 @@
+{
+  "account_id": "ACC001",
+  "version": "v1",
+  "company_name": "ZenTrades AI",
+  "contact_name": null,
+  "email": "info@zentrades.ai",
+  "phone": null,
+  "office_address": null,
+  "business_hours": {
+    "days": "Monday to Friday",
+    "start_time": null,
+    "end_time": null,
+    "timezone": null,
+    "raw": "Monday to Friday",
+    "confirmed": false
+  },
+  "services_supported": [
+    "Electrical Service",
+    "Inspections",
+    "Repairs",
+    "Quotes/Estimates"
+  ],
+  "emergency_definition": [
+    "[CLIENT]: Anything electrical that's a safety hazard \u2014 exposed wires, power outages at a facility, electrical fires, sparking panels",
+    "Those need someone on the line immediately",
+    "We handle electrical service for commercial clients \u2014 mostly inspections, repairs, and emergency electrical work"
+  ],
+  "non_emergency_definition": [
+    "[CLIENT]: Scheduling inspections, getting quotes, general questions",
+    "We handle electrical service for commercial clients \u2014 mostly inspections, repairs, and emergency electrical work",
+    "Those can wait till next business day"
+  ],
+  "emergency_routing_rules": {
+    "primary_number": null,
+    "backup_number": null,
+    "invalid_numbers_flagged": [],
+    "transfer_timeout_seconds": null,
+    "fallback_action": null
+  },
+  "non_emergency_routing_rules": {
+    "action": "collect_details_and_callback",
+    "callback_timing": "next business day"
+  },
+  "call_transfer_rules": {
+    "timeout_seconds": null,
+    "retry_number": null,
+    "on_fail": null
+  },
+  "integration_constraints": [
+    "[CLIENT]: We use ServiceTrade for job management",
+    "don't have that number on me right now"
+  ],
+  "after_hours_flow_summary": "Emergency: collect name/number/address \u2192 transfer immediately | Non-emergency: collect details \u2192 confirm callback next business day",
+  "office_hours_flow_summary": "Greet \u2192 Ask purpose \u2192 Collect name and number \u2192 Transfer call \u2192 Fallback if fails \u2192 Close",
+  "phone_validation": {
+    "valid": [],
+    "invalid": []
+  },
+  "questions_or_unknowns": [
+    "Missing or unconfirmed: business_hours.start_time",
+    "Missing or unconfirmed: business_hours.timezone",
+    "Missing or unconfirmed: emergency_routing_rules.primary_number",
+    "Missing or unconfirmed: emergency_routing_rules.transfer_timeout_seconds",
+    "Missing or unconfirmed: office_address"
+  ],
+  "notes": "Extracted from demo transcript. Version: v1."
+}

@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ZenTrades AI — Clara Pipeline Dashboard</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0f1117; color: #e2e8f0; min-height: 100vh; }
+
+    header { background: #1a1d2e; border-bottom: 1px solid #2d3748; padding: 16px 32px; display: flex; align-items: center; gap: 12px; }
+    header h1 { font-size: 18px; font-weight: 700; color: #fff; }
+    header span { font-size: 12px; background: #6366f1; color: #fff; padding: 2px 10px; border-radius: 20px; }
+
+    .container { max-width: 1200px; margin: 0 auto; padding: 32px; }
+
+    .metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 16px; margin-bottom: 32px; }
+    .metric-card { background: #1a1d2e; border: 1px solid #2d3748; border-radius: 12px; padding: 20px; text-align: center; }
+    .metric-card .value { font-size: 36px; font-weight: 800; color: #6366f1; }
+    .metric-card .label { font-size: 12px; color: #94a3b8; margin-top: 4px; text-transform: uppercase; letter-spacing: 0.05em; }
+
+    .section-title { font-size: 14px; font-weight: 600; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 16px; margin-top: 32px; }
+
+    .accounts { display: grid; gap: 24px; }
+    .account-card { background: #1a1d2e; border: 1px solid #2d3748; border-radius: 12px; overflow: hidden; }
+    .account-header { padding: 16px 20px; background: #12152a; display: flex; justify-content: space-between; align-items: center; cursor: pointer; border-bottom: 1px solid #2d3748; }
+    .account-header:hover { background: #1e2240; }
+    .account-name { font-weight: 700; font-size: 15px; }
+    .account-id { font-size: 12px; color: #94a3b8; margin-top: 2px; }
+    .badges { display: flex; gap: 8px; }
+    .badge { font-size: 11px; padding: 3px 10px; border-radius: 20px; font-weight: 600; }
+    .badge-v1 { background: #1e3a5f; color: #60a5fa; }
+    .badge-v2 { background: #1a3a2a; color: #4ade80; }
+    .badge-warn { background: #3a2a10; color: #fbbf24; }
+    .badge-ok { background: #1a3a2a; color: #4ade80; }
+
+    .account-body { display: none; padding: 0; }
+    .account-body.open { display: block; }
+
+    .tabs { display: flex; border-bottom: 1px solid #2d3748; }
+    .tab { padding: 10px 20px; font-size: 13px; cursor: pointer; color: #94a3b8; border-bottom: 2px solid transparent; transition: all 0.15s; }
+    .tab.active { color: #6366f1; border-bottom-color: #6366f1; }
+    .tab:hover { color: #e2e8f0; }
+
+    .tab-content { display: none; padding: 20px; }
+    .tab-content.active { display: block; }
+
+    .diff-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .diff-table th { text-align: left; padding: 8px 12px; font-size: 11px; text-transform: uppercase; color: #64748b; border-bottom: 1px solid #2d3748; }
+    .diff-table td { padding: 10px 12px; border-bottom: 1px solid #1e2530; vertical-align: top; }
+    .diff-table tr:last-child td { border-bottom: none; }
+    .field-name { font-family: 'Courier New', monospace; font-size: 12px; color: #a78bfa; }
+    .old-val { color: #f87171; font-family: monospace; font-size: 12px; max-width: 280px; word-break: break-word; }
+    .new-val { color: #4ade80; font-family: monospace; font-size: 12px; max-width: 280px; word-break: break-word; }
+    .null-val { color: #475569; font-style: italic; }
+
+    .unknowns-list { list-style: none; }
+    .unknowns-list li { padding: 8px 12px; border-radius: 6px; margin-bottom: 6px; font-size: 13px; display: flex; align-items: flex-start; gap: 8px; }
+    .unknowns-list li.resolved { background: #1a3a2a; color: #4ade80; }
+    .unknowns-list li.unresolved { background: #3a2a10; color: #fbbf24; }
+    .unknowns-list li .icon { font-size: 14px; flex-shrink: 0; margin-top: 1px; }
+
+    .memo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .memo-field { background: #0f1117; border-radius: 8px; padding: 12px; }
+    .memo-field .key { font-size: 11px; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px; }
+    .memo-field .val { font-size: 13px; color: #e2e8f0; word-break: break-word; }
+    .memo-field .val.missing { color: #f87171; font-style: italic; }
+
+    .prompt-box { background: #0a0c16; border: 1px solid #2d3748; border-radius: 8px; padding: 16px; font-family: monospace; font-size: 12px; color: #cbd5e1; white-space: pre-wrap; line-height: 1.6; max-height: 400px; overflow-y: auto; }
+
+    .tasks-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .tasks-table th { text-align: left; padding: 8px 12px; font-size: 11px; text-transform: uppercase; color: #64748b; border-bottom: 1px solid #2d3748; }
+    .tasks-table td { padding: 10px 12px; border-bottom: 1px solid #1e2530; }
+    .status-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; }
+    .status-dot.completed { background: #4ade80; }
+    .status-dot.failed { background: #f87171; }
+    .action-yes { color: #fbbf24; font-weight: 600; }
+    .action-no { color: #4ade80; }
+
+    .load-btn { background: #6366f1; color: #fff; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: 600; margin-bottom: 24px; }
+    .load-btn:hover { background: #5254cc; }
+    .empty-state { text-align: center; padding: 48px; color: #475569; }
+    .empty-state p { margin-top: 8px; font-size: 13px; }
+    .chevron { transition: transform 0.2s; display: inline-block; }
+    .chevron.open { transform: rotate(180deg); }
+  </style>
+</head>
+<body>
+  <header>
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect width="24" height="24" rx="6" fill="#6366f1"/><path d="M7 12h10M12 7v10" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>
+    <h1>ZenTrades AI — Clara Pipeline Dashboard</h1>
+    <span>Beta</span>
+  </header>
+
+  <div class="container">
+    <button class="load-btn" onclick="loadData()">📂 Load outputs/batch_summary.json</button>
+
+    <div id="metrics" class="metrics" style="display:none"></div>
+    <div id="tasks-section" style="display:none">
+      <div class="section-title">📋 Task Tracker</div>
+      <div class="account-card">
+        <div style="padding:16px 20px;overflow-x:auto;">
+          <table class="tasks-table" id="tasks-table">
+            <thead><tr>
+              <th>Task ID</th><th>Account</th><th>Company</th><th>Pipeline</th>
+              <th>Version</th><th>Status</th><th>Unknowns</th><th>Action Required</th>
+            </tr></thead>
+            <tbody id="tasks-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div id="accounts-section" style="display:none">
+      <div class="section-title">🏢 Accounts</div>
+      <div class="accounts" id="accounts-container"></div>
+    </div>
+
+    <div id="empty" class="empty-state">
+      <div style="font-size:48px">📊</div>
+      <p>Click "Load" to load pipeline outputs and view the dashboard.</p>
+      <p style="margin-top:8px;font-size:11px;color:#334155">Or open this file from the clara_pipeline root folder after running batch_runner.py</p>
+    </div>
+  </div>
+
+  <script>
+    let globalData = null;
+
+    async function loadData() {
+      // Try to auto-load from relative path
+      try {
+        const r = await fetch('outputs/batch_summary.json');
+        if (r.ok) { globalData = await r.json(); renderDashboard(); return; }
+      } catch(e) {}
+
+      // Fallback: file picker
+      const input = document.createElement('input');
+      input.type = 'file';
+      input.accept = '.json';
+      input.onchange = async e => {
+        const text = await e.target.files[0].text();
+        globalData = JSON.parse(text);
+        renderDashboard();
+      };
+      input.click();
+    }
+
+    function renderDashboard() {
+      const data = globalData;
+      document.getElementById('empty').style.display = 'none';
+
+      const pA = data.pipeline_a_results || [];
+      const pB = data.pipeline_b_results || [];
+      const summary = data.summary || {};
+
+      // Metrics
+      const metricsEl = document.getElementById('metrics');
+      metricsEl.style.display = 'grid';
+      metricsEl.innerHTML = [
+        { v: summary.total_accounts || 0, l: 'Total Accounts' },
+        { v: (summary.pipeline_a || {}).success || 0, l: 'V1 Generated' },
+        { v: (summary.pipeline_b || {}).success || 0, l: 'V2 Generated' },
+        { v: (summary.pipeline_a || {}).failed + (summary.pipeline_b || {}).failed || 0, l: 'Failed Runs' },
+        { v: pA.reduce((s,r) => s + (r.unknowns_count||0), 0), l: 'Total Unknowns' },
+        { v: pB.reduce((s,r) => s + (r.unknowns_resolved||0), 0), l: 'Unknowns Resolved' },
+      ].map(m => `<div class="metric-card"><div class="value">${m.v}</div><div class="label">${m.l}</div></div>`).join('');
+
+      // Load tasks_db if available
+      loadTasksAndAccounts(pA, pB);
+    }
+
+    async function loadTasksAndAccounts(pA, pB) {
+      let tasks = [];
+      try {
+        const r = await fetch('outputs/tasks_db.json');
+        if (r.ok) { const db = await r.json(); tasks = db.tasks || []; }
+      } catch(e) {}
+
+      if (tasks.length > 0) {
+        document.getElementById('tasks-section').style.display = 'block';
+        const tbody = document.getElementById('tasks-body');
+        tbody.innerHTML = tasks.map(t => `
+          <tr>
+            <td><code style="color:#a78bfa">${t.task_id}</code></td>
+            <td>${t.account_id}</td>
+            <td>${t.company_name}</td>
+            <td>${t.pipeline}</td>
+            <td><span class="badge ${t.version==='v1'?'badge-v1':'badge-v2'}">${t.version.toUpperCase()}</span></td>
+            <td><span class="status-dot ${t.status}"></span>${t.status}</td>
+            <td>${t.unknowns_count}</td>
+            <td class="${t.action_required?'action-yes':'action-no'}">${t.action_required?'⚠️ Yes':'✅ No'}</td>
+          </tr>
+        `).join('');
+      }
+
+      // Build accounts from pipeline results
+      const accountIds = [...new Set([...pA.map(r=>r.account_id), ...pB.map(r=>r.account_id)])];
+      if (accountIds.length === 0) return;
+
+      document.getElementById('accounts-section').style.display = 'block';
+      const container = document.getElementById('accounts-container');
+      container.innerHTML = '';
+
+      for (const id of accountIds) {
+        const v1r = pA.find(r => r.account_id === id);
+        const v2r = pB.find(r => r.account_id === id);
+        await renderAccountCard(container, id, v1r, v2r);
+      }
+    }
+
+    async function renderAccountCard(container, id, v1r, v2r) {
+      let v1memo = null, v2memo = null, changelog = null;
+      try { const r = await fetch(`outputs/accounts/${id}/v1/account_memo.json`); if(r.ok) v1memo = await r.json(); } catch(e){}
+      try { const r = await fetch(`outputs/accounts/${id}/v2/account_memo.json`); if(r.ok) v2memo = await r.json(); } catch(e){}
+      try { const r = await fetch(`outputs/accounts/${id}/changelog/changes.json`); if(r.ok) changelog = await r.json(); } catch(e){}
+      try { const r = await fetch(`outputs/accounts/${id}/v1/agent_prompt.txt`); if(r.ok) v1r._prompt = await r.text(); } catch(e){}
+      try { const r = await fetch(`outputs/accounts/${id}/v2/agent_prompt.txt`); if(r.ok) v2r && (v2r._prompt = await r.text()); } catch(e){}
+
+      const company = (v1memo || v2memo || {}).company_name || id;
+      const unknowns = (v1r && v1r.unknowns_count) || 0;
+      const hasV2 = !!v2r;
+
+      const card = document.createElement('div');
+      card.className = 'account-card';
+      card.innerHTML = `
+        <div class="account-header" onclick="toggleCard('${id}')">
+          <div>
+            <div class="account-name">${company}</div>
+            <div class="account-id">${id}</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:12px">
+            <div class="badges">
+              ${v1r ? '<span class="badge badge-v1">V1</span>' : ''}
+              ${hasV2 ? '<span class="badge badge-v2">V2</span>' : ''}
+              ${unknowns > 0 ? `<span class="badge badge-warn">⚠ ${unknowns} unknowns</span>` : '<span class="badge badge-ok">✅ Clean</span>'}
+            </div>
+            <span class="chevron" id="chev-${id}">▼</span>
+          </div>
+        </div>
+        <div class="account-body" id="body-${id}">
+          <div class="tabs">
+            <div class="tab active" onclick="switchTab('${id}','memo')">📋 Memo</div>
+            <div class="tab" onclick="switchTab('${id}','diff')">🔄 Diff v1→v2</div>
+            <div class="tab" onclick="switchTab('${id}','prompt')">📝 Prompt</div>
+            <div class="tab" onclick="switchTab('${id}','unknowns')">❓ Unknowns</div>
+          </div>
+          <div class="tab-content active" id="${id}-memo">${renderMemo(v1memo, v2memo)}</div>
+          <div class="tab-content" id="${id}-diff">${renderDiff(changelog)}</div>
+          <div class="tab-content" id="${id}-prompt">${renderPrompt(v1r, v2r)}</div>
+          <div class="tab-content" id="${id}-unknowns">${renderUnknowns(changelog, v1memo, v2memo)}</div>
+        </div>
+      `;
+      container.appendChild(card);
+    }
+
+    function renderMemo(v1, v2) {
+      const m = v2 || v1 || {};
+      const fields = ['company_name','contact_name','email','phone','office_address','services_supported','emergency_definition','after_hours_flow_summary','office_hours_flow_summary','notes'];
+      const bh = m.business_hours || {};
+      return `<div class="memo-grid">
+        <div class="memo-field"><div class="key">Business Hours</div><div class="val ${!bh.start_time?'missing':''}">${bh.days||'?'}, ${bh.start_time||'?'} – ${bh.end_time||'?'} ${bh.timezone||'?'}</div></div>
+        <div class="memo-field"><div class="key">Transfer Number</div><div class="val ${!(m.emergency_routing_rules||{}).primary_number?'missing':''}">${(m.emergency_routing_rules||{}).primary_number||'Not set'}</div></div>
+        ${fields.map(f => `<div class="memo-field"><div class="key">${f.replace(/_/g,' ')}</div><div class="val ${!m[f]?'missing':''}">${Array.isArray(m[f])?m[f].join(', '):(m[f]||'—')}</div></div>`).join('')}
+      </div>`;
+    }
+
+    function renderDiff(cl) {
+      if (!cl) return '<div style="padding:20px;color:#475569">No changelog available. Run Pipeline B first.</div>';
+      const changes = cl.memo_changes || [];
+      if (!changes.length) return '<div style="padding:20px;color:#4ade80">✅ No changes detected.</div>';
+      return `<div style="margin-bottom:12px;font-size:12px;color:#94a3b8">
+        ${cl.summary.total_memo_changes} fields changed · ${cl.summary.unknowns_resolved} unknowns resolved · ${cl.summary.unknowns_remaining} remaining
+      </div>
+      <table class="diff-table">
+        <thead><tr><th>Field</th><th>Before (v1)</th><th>After (v2)</th></tr></thead>
+        <tbody>${changes.map(c => `
+          <tr>
+            <td class="field-name">${c.field}</td>
+            <td class="old-val">${c.old_value===null?'<span class="null-val">null</span>':escHtml(String(c.old_value))}</td>
+            <td class="new-val">${c.new_value===null?'<span class="null-val">null</span>':escHtml(String(c.new_value))}</td>
+          </tr>`).join('')}
+        </tbody>
+      </table>`;
+    }
+
+    function renderPrompt(v1r, v2r) {
+      const v1p = v1r && v1r._prompt ? `<div style="margin-bottom:12px"><span class="badge badge-v1">V1 PROMPT</span></div><div class="prompt-box">${escHtml(v1r._prompt)}</div>` : '<div style="color:#475569;padding:12px">V1 prompt not loaded</div>';
+      const v2p = v2r && v2r._prompt ? `<div style="margin:16px 0 12px"><span class="badge badge-v2">V2 PROMPT</span></div><div class="prompt-box">${escHtml(v2r._prompt)}</div>` : '';
+      return v1p + v2p;
+    }
+
+    function renderUnknowns(cl, v1memo, v2memo) {
+      const resolved = (cl && cl.resolved_unknowns) || [];
+      const remaining = (v2memo && v2memo.questions_or_unknowns) || (v1memo && v1memo.questions_or_unknowns) || [];
+      if (!resolved.length && !remaining.length) return '<div style="padding:20px;color:#4ade80">✅ No unknowns.</div>';
+      return `<ul class="unknowns-list">
+        ${resolved.map(u => `<li class="resolved"><span class="icon">✅</span>${u}</li>`).join('')}
+        ${remaining.map(u => `<li class="unresolved"><span class="icon">⚠️</span>${u}</li>`).join('')}
+      </ul>`;
+    }
+
+    function toggleCard(id) {
+      const body = document.getElementById('body-' + id);
+      const chev = document.getElementById('chev-' + id);
+      body.classList.toggle('open');
+      chev.classList.toggle('open');
+    }
+
+    function switchTab(accountId, tab) {
+      const body = document.getElementById('body-' + accountId);
+      body.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      body.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+      const clickedTab = [...body.querySelectorAll('.tab')].find(t => t.getAttribute('onclick').includes(`'${tab}'`));
+      if (clickedTab) clickedTab.classList.add('active');
+      const content = document.getElementById(`${accountId}-${tab}`);
+      if (content) content.classList.add('active');
+    }
+
+    function escHtml(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  </script>
+</body>
+</html>
